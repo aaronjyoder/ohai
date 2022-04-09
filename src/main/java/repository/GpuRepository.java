@@ -1,5 +1,6 @@
 package repository;
 
+import static org.lwjgl.cuda.CU.CU_DEVICE_ATTRIBUTE_GLOBAL_MEMORY_BUS_WIDTH;
 import static org.lwjgl.cuda.CU.CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT;
 import static org.lwjgl.cuda.CU.cuDeviceComputeCapability;
 import static org.lwjgl.cuda.CU.cuDeviceGet;
@@ -18,10 +19,10 @@ import model.gpu.compute.GpuComputeModel;
 import model.gpu.driver.GpuDriverModel;
 import model.gpu.general.GpuGeneralModel;
 import model.gpu.memory.GpuMemoryModel;
+import model.gpu.vendor.GpuVendor;
 import org.lwjgl.system.MemoryStack;
 import oshi.SystemInfo;
 import util.graphics.NvidiaUtil;
-import model.gpu.vendor.GpuVendor;
 
 public class GpuRepository {
 
@@ -36,7 +37,7 @@ public class GpuRepository {
           .architecture(getArchitecture(vendor))
           .build();
       var compute = generateComputeModel(vendor);
-      var memory = new GpuMemoryModel.Builder(0).build();
+      var memory = new GpuMemoryModel.Builder(getFrameBufferSize(vendor)).busWidth(getMemoryBusWidth(vendor)).build();
       var driver = new GpuDriverModel.Builder().build();
       result.add(new GpuModel(general, compute, memory, driver));
     }
@@ -140,6 +141,59 @@ public class GpuRepository {
     }
 
     return builder.build();
+  }
+
+  private long getFrameBufferSize(GpuVendor vendor) {
+    AtomicReference<Long> result = new AtomicReference<>(-1L);
+
+    switch (vendor) {
+      case AMD -> {
+        // TODO: Use AMD-specific APIs where possible
+      }
+      case INTEL -> {
+        // TODO: Use Intel-specific APIs where possible
+      }
+      case NVIDIA -> {
+        // TODO: Use Nvidia-specific APIs where possible
+      }
+      case UNKNOWN -> {
+        // TODO: Do not use any vendor-specific APIs
+      }
+    }
+
+    return result.get();
+  }
+
+  private int getMemoryBusWidth(GpuVendor vendor) {
+    AtomicReference<Integer> result = new AtomicReference<>(-1);
+
+    switch (vendor) {
+      case AMD -> {
+        // TODO: Use AMD-specific APIs where possible
+      }
+      case INTEL -> {
+        // TODO: Use Intel-specific APIs where possible
+      }
+      case NVIDIA -> {
+        new CUDAInstance().run(() -> {
+          try (MemoryStack stack = stackPush()) {
+            var pi = stack.mallocInt(1);
+            cuInit(0);
+            cuDeviceGetCount(pi);
+            cuDeviceGet(pi, 0);
+            var device = pi.get(0);
+
+            cuDeviceGetAttribute(pi, CU_DEVICE_ATTRIBUTE_GLOBAL_MEMORY_BUS_WIDTH, device);
+            result.set(pi.get(0));
+          }
+        });
+      }
+      case UNKNOWN -> {
+        // TODO: Do not use any vendor-specific APIs
+      }
+    }
+
+    return result.get();
   }
 
 }
