@@ -35,7 +35,7 @@ public class GpuRepository {
           .vendor(vendor)
           .architecture(getArchitecture())
           .build();
-      var compute = generateComputeModel();
+      var compute = generateComputeModel(vendor);
       var memory = new GpuMemoryModel.Builder(0).build();
       var driver = new GpuDriverModel.Builder().build();
       result.add(new GpuModel(general, compute, memory, driver));
@@ -77,39 +77,52 @@ public class GpuRepository {
     return result.get();
   }
 
-  private GpuComputeModel generateComputeModel() { // Only works for Nvidia currently
+  private GpuComputeModel generateComputeModel(GpuVendor vendor) { // Only works for Nvidia currently
     var builder = new GpuComputeModel.Builder();
 
-    new CUDAInstance().run(() -> {
-      try (MemoryStack stack = stackPush()) {
-        var pi = stack.mallocInt(1);
-        cuInit(0);
-        cuDeviceGetCount(pi);
-        cuDeviceGet(pi, 0);
-        var device = pi.get(0);
-
-        var pt = stack.mallocInt(1);
-        cuDeviceComputeCapability(pi, pt, device);
-
-        var major = pi.get(0);
-        var minor = pt.get(0);
-
-        cuDeviceGetAttribute(pi, CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT, device);
-        var cuCount = pi.get(0);
-
-        var shaderUnitCount = NvidiaUtil.getShaderUnitsPerSM(major, minor) * cuCount;
-        var tensorUnitCount = NvidiaUtil.getTensorUnitsPerSM(major, minor) * cuCount;
-        var raytracingUnitCount = NvidiaUtil.getRaytracingUnitsPerSM(major, minor) * cuCount;
-
-        builder.computeUnits(cuCount);
-        builder.unifiedShaderUnits(shaderUnitCount);
-        builder.tensorUnits(tensorUnitCount);
-        builder.raytracingUnits(raytracingUnitCount);
-        builder.rasterOperationUnits(-1); // Don't know how to get these yet
-        builder.textureMappingUnits(-1); // Don't know how to get these yet
-
+    switch (vendor) {
+      case AMD -> {
+        // TODO: Use AMD-specific APIs where possible
       }
-    });
+      case INTEL -> {
+        // TODO: Use Intel-specific APIs where possible
+      }
+      case NVIDIA -> {
+        new CUDAInstance().run(() -> {
+          try (MemoryStack stack = stackPush()) {
+            var pi = stack.mallocInt(1);
+            cuInit(0);
+            cuDeviceGetCount(pi);
+            cuDeviceGet(pi, 0);
+            var device = pi.get(0);
+
+            var pt = stack.mallocInt(1);
+            cuDeviceComputeCapability(pi, pt, device);
+
+            var major = pi.get(0);
+            var minor = pt.get(0);
+
+            cuDeviceGetAttribute(pi, CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT, device);
+            var cuCount = pi.get(0);
+
+            var shaderUnitCount = NvidiaUtil.getShaderUnitsPerSM(major, minor) * cuCount;
+            var tensorUnitCount = NvidiaUtil.getTensorUnitsPerSM(major, minor) * cuCount;
+            var raytracingUnitCount = NvidiaUtil.getRaytracingUnitsPerSM(major, minor) * cuCount;
+
+            builder.computeUnits(cuCount);
+            builder.unifiedShaderUnits(shaderUnitCount);
+            builder.tensorUnits(tensorUnitCount);
+            builder.raytracingUnits(raytracingUnitCount);
+            builder.rasterOperationUnits(-1); // Don't know how to get these yet
+            builder.textureMappingUnits(-1); // Don't know how to get these yet
+
+          }
+        });
+      }
+      case UNKNOWN -> {
+        // TODO: Do not use any vendor-specific APIs
+      }
+    }
 
     return builder.build();
   }
