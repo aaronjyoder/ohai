@@ -123,9 +123,9 @@ fun ComputeSection(model: GpuComputeModel, terms: MarketingTerms) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TextCard(Modifier.weight(1.0f, true), terms.computeUnitTerm().shortPlural, model.computeUnits().toString())
-            TextCard(Modifier.weight(1.0f, true), "ROPs", model.rasterOperationUnits().toString())
-            TextCard(Modifier.weight(1.0f, true), "TMUs", model.textureMappingUnits().toString())
+            TextCard(Modifier.weight(1.0f, true), terms.computeUnitTerm().shortPlural, if (model.computeUnits() < 0) "Unknown" else model.computeUnits().toString())
+            TextCard(Modifier.weight(1.0f, true), "ROPs", if (model.rasterOperationUnits() < 0) "Unknown" else model.rasterOperationUnits().toString())
+            TextCard(Modifier.weight(1.0f, true), "TMUs", if (model.textureMappingUnits() < 0) "Unknown" else model.textureMappingUnits().toString())
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -138,9 +138,9 @@ fun ComputeSection(model: GpuComputeModel, terms: MarketingTerms) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TextCard(Modifier.weight(1.0f, true), terms.shaderUnitTerm().shortPlural, model.unifiedShaderUnits().toString())
-            TextCard(Modifier.weight(1.0f, true), terms.raytracingUnitTerm().shortPlural, model.raytracingUnits().toString())
-            TextCard(Modifier.weight(1.0f, true), terms.tensorUnitTerm().shortPlural, model.tensorUnits().toString())
+            TextCard(Modifier.weight(1.0f, true), terms.shaderUnitTerm().shortPlural, if (model.unifiedShaderUnits() < 0) "Unknown" else model.unifiedShaderUnits().toString())
+            TextCard(Modifier.weight(1.0f, true), terms.raytracingUnitTerm().shortPlural, if (model.raytracingUnits() < 0) "Unknown" else model.raytracingUnits().toString())
+            TextCard(Modifier.weight(1.0f, true), terms.tensorUnitTerm().shortPlural, if (model.tensorUnits() < 0) "Unknown" else model.tensorUnits().toString())
         }
     }
 }
