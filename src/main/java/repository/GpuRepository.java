@@ -9,7 +9,7 @@ import static org.lwjgl.cuda.CU.cuInit;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 import compute.CUDAInstance;
-import graphics.util.NvidiaUtil;
+import util.graphics.NvidiaUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;

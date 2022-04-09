@@ -1,13 +1,13 @@
-package graphics.util;
+package util.graphics;
 
 import java.util.Map;
 
 public class NvidiaUtil { // Check this for updates: https://github.com/NVIDIA/cuda-samples/blob/master/Common/helper_cuda.h#L699
 
   // TODO: ROPs can possibly be grabbed via NVApi, as can SMs and possibly shader units (cuda cores). SMs can also be grabbed via OpenCL and CUDA, though.
-  // Hex notation: 0xMm, M = SM major version, m = SM minor version
+  // Hex notation: 0xMm, M = SM major version, m = SM minor version. Example: 0x10 = version 1.0
   // SM and CU are interchangeable terms here. Shader units may also be known as SPs.
-  private static final Map<Integer, GpuRecord> smDataMap = Map.ofEntries(
+  private static final Map<Integer, GpuRecord> smVersionDataMap = Map.ofEntries(
       Map.entry(0x10, new GpuRecord("Tesla", 8, 0, 0)), // Tesla
       Map.entry(0x11, new GpuRecord("Tesla", 8, 0, 0)), // Tesla
       Map.entry(0x12, new GpuRecord("Tesla", 8, 0, 0)), // Tesla
@@ -35,7 +35,7 @@ public class NvidiaUtil { // Check this for updates: https://github.com/NVIDIA/c
 
   public static int getShaderUnitsPerSM(int major, int minor) {
     int versionEncoding = ((major << 4) + minor); // Convert major and minor version
-    for (Map.Entry<Integer, GpuRecord> entry : smDataMap.entrySet()) {
+    for (Map.Entry<Integer, GpuRecord> entry : smVersionDataMap.entrySet()) {
       if (versionEncoding == entry.getKey()) {
         return entry.getValue().shaderUnitsPerCU();
       }
@@ -45,7 +45,7 @@ public class NvidiaUtil { // Check this for updates: https://github.com/NVIDIA/c
 
   public static int getTensorUnitsPerSM(int major, int minor) {
     int versionEncoding = ((major << 4) + minor); // Convert major and minor version
-    for (Map.Entry<Integer, GpuRecord> entry : smDataMap.entrySet()) {
+    for (Map.Entry<Integer, GpuRecord> entry : smVersionDataMap.entrySet()) {
       if (versionEncoding == entry.getKey()) {
         return entry.getValue().tensorUnitsPerCU();
       }
@@ -55,7 +55,7 @@ public class NvidiaUtil { // Check this for updates: https://github.com/NVIDIA/c
 
   public static int getRaytraceUnitsPerSM(int major, int minor) {
     int versionEncoding = ((major << 4) + minor); // Convert major and minor version
-    for (Map.Entry<Integer, GpuRecord> entry : smDataMap.entrySet()) {
+    for (Map.Entry<Integer, GpuRecord> entry : smVersionDataMap.entrySet()) {
       if (versionEncoding == entry.getKey()) {
         return entry.getValue().raytraceUnitsPerCU();
       }
@@ -65,7 +65,7 @@ public class NvidiaUtil { // Check this for updates: https://github.com/NVIDIA/c
 
   public static String getArchitecture(int major, int minor) {
     int versionEncoding = ((major << 4) + minor); // Convert major and minor version
-    for (Map.Entry<Integer, GpuRecord> entry : smDataMap.entrySet()) {
+    for (Map.Entry<Integer, GpuRecord> entry : smVersionDataMap.entrySet()) {
       if (versionEncoding == entry.getKey()) {
         return entry.getValue().architecture();
       }
