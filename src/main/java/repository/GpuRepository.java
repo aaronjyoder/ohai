@@ -10,6 +10,7 @@ import static org.lwjgl.cuda.CU.cuInit;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 import compute.CUDAInstance;
+import graphics.OpenGLInstance;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -20,6 +21,9 @@ import model.gpu.driver.GpuDriverModel;
 import model.gpu.general.GpuGeneralModel;
 import model.gpu.memory.GpuMemoryModel;
 import model.gpu.vendor.GpuVendor;
+import org.lwjgl.opengl.ATIMeminfo;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.NVXGPUMemoryInfo;
 import org.lwjgl.system.MemoryStack;
 import oshi.SystemInfo;
 import util.graphics.NvidiaUtil;
@@ -143,18 +147,26 @@ public class GpuRepository {
     return builder.build();
   }
 
-  private long getFrameBufferSize(GpuVendor vendor) {
+  private long getFrameBufferSize(GpuVendor vendor) { // TODO: Might be better to do a lookup table, not sure.
     AtomicReference<Long> result = new AtomicReference<>(-1L);
 
     switch (vendor) {
       case AMD -> {
         // TODO: Use AMD-specific APIs where possible
+        new OpenGLInstance().run(() -> {
+          long dedicatedMem = GL11.glGetInteger(ATIMeminfo.GL_VBO_FREE_MEMORY_ATI); // This is in kilobytes
+          result.set(dedicatedMem * 1000);
+        });
       }
       case INTEL -> {
         // TODO: Use Intel-specific APIs where possible
       }
       case NVIDIA -> {
         // TODO: Use Nvidia-specific APIs where possible
+        new OpenGLInstance().run(() -> {
+          long dedicatedMem = GL11.glGetInteger(NVXGPUMemoryInfo.GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX); // This is in kilobytes
+          result.set(dedicatedMem * 1000);
+        });
       }
       case UNKNOWN -> {
         // TODO: Do not use any vendor-specific APIs
