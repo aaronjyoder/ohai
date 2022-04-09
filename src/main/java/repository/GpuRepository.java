@@ -9,9 +9,9 @@ import static org.lwjgl.cuda.CU.cuInit;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 import compute.CUDAInstance;
-import util.graphics.NvidiaUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 import model.gpu.GpuModel;
 import model.gpu.compute.GpuComputeModel;
@@ -20,6 +20,8 @@ import model.gpu.general.GpuGeneralModel;
 import model.gpu.memory.GpuMemoryModel;
 import org.lwjgl.system.MemoryStack;
 import oshi.SystemInfo;
+import util.graphics.NvidiaUtil;
+import util.graphics.vendor.GpuVendor;
 
 public class GpuRepository {
 
@@ -27,13 +29,30 @@ public class GpuRepository {
     List<GpuModel> result = new ArrayList<>();
     var gpus = new SystemInfo().getHardware().getGraphicsCards();
     for (var gpu : gpus) {
-      var general = new GpuGeneralModel.Builder(gpu.getName()).vendor(gpu.getVendor()).deviceId(gpu.getDeviceId()).architecture(getArchitecture()).build();
+      var vendor = getVendor(gpu.getVendor().toLowerCase());
+
+      var general = new GpuGeneralModel.Builder(gpu.getName()).deviceId(gpu.getDeviceId())
+          .vendor(vendor)
+          .architecture(getArchitecture())
+          .build();
       var compute = generateComputeModel();
       var memory = new GpuMemoryModel.Builder(0).build();
       var driver = new GpuDriverModel.Builder().build();
       result.add(new GpuModel(general, compute, memory, driver));
     }
     return result;
+  }
+
+  private GpuVendor getVendor(String name) { // TODO: Use vendor ID instead
+    var vendorName = name.toLowerCase(Locale.US);
+    if (vendorName.contains("nvidia")) {
+      return GpuVendor.NVIDIA;
+    } else if (vendorName.contains("amd")) {
+      return GpuVendor.AMD;
+    } else if (vendorName.contains("intel")) {
+      return GpuVendor.INTEL;
+    }
+    return GpuVendor.UNKNOWN;
   }
 
   private String getArchitecture() {
@@ -80,12 +99,12 @@ public class GpuRepository {
 
         var shaderUnitCount = NvidiaUtil.getShaderUnitsPerSM(major, minor) * cuCount;
         var tensorUnitCount = NvidiaUtil.getTensorUnitsPerSM(major, minor) * cuCount;
-        var raytraceUnitCount = NvidiaUtil.getRaytraceUnitsPerSM(major, minor) * cuCount;
+        var raytracingUnitCount = NvidiaUtil.getRaytracingUnitsPerSM(major, minor) * cuCount;
 
         builder.computeUnits(cuCount);
-        builder.shaderUnits(shaderUnitCount);
+        builder.unifiedShaderUnits(shaderUnitCount);
         builder.tensorUnits(tensorUnitCount);
-        builder.raytracingUnits(raytraceUnitCount);
+        builder.raytracingUnits(raytracingUnitCount);
 
       }
     });

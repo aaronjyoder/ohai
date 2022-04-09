@@ -53,11 +53,11 @@ public class NvidiaUtil { // Check this for updates: https://github.com/NVIDIA/c
     return -1; // Not in the table, so it's unknown.
   }
 
-  public static int getRaytraceUnitsPerSM(int major, int minor) {
+  public static int getRaytracingUnitsPerSM(int major, int minor) {
     int versionEncoding = ((major << 4) + minor); // Convert major and minor version
     for (Map.Entry<Integer, GpuRecord> entry : smVersionDataMap.entrySet()) {
       if (versionEncoding == entry.getKey()) {
-        return entry.getValue().raytraceUnitsPerCU();
+        return entry.getValue().raytracingUnitsPerCU();
       }
     }
     return -1; // Not in the table, so it's unknown.

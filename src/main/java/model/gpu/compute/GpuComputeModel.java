@@ -5,7 +5,9 @@ public class GpuComputeModel {
   private final int rasterOperationUnits;
   private final int textureMappingUnits;
   private final int computeUnits;
-  private final int shaderUnits;
+  private final int pixelShaderUnits;
+  private final int vertexShaderUnits;
+  private final int unifiedShaderUnits;
   private final int raytracingUnits;
   private final int tensorUnits;
 
@@ -13,7 +15,9 @@ public class GpuComputeModel {
     this.rasterOperationUnits = builder.rasterOperationUnits;
     this.textureMappingUnits = builder.textureMappingUnits;
     this.computeUnits = builder.computeUnits;
-    this.shaderUnits = builder.shaderUnits;
+    this.pixelShaderUnits = builder.pixelShaderUnits;
+    this.vertexShaderUnits = builder.vertexShaderUnits;
+    this.unifiedShaderUnits = builder.unifiedShaderUnits;
     this.raytracingUnits = builder.raytracingUnits;
     this.tensorUnits = builder.tensorUnits;
   }
@@ -30,8 +34,16 @@ public class GpuComputeModel {
     return computeUnits;
   }
 
-  public int shaderUnits() {
-    return shaderUnits;
+  public int pixelShaderUnits() {
+    return pixelShaderUnits;
+  }
+
+  public int vertexShaderUnits() {
+    return vertexShaderUnits;
+  }
+
+  public int unifiedShaderUnits() {
+    return unifiedShaderUnits;
   }
 
   public int raytracingUnits() {
@@ -47,7 +59,9 @@ public class GpuComputeModel {
     private int rasterOperationUnits = 0;
     private int textureMappingUnits = 0;
     private int computeUnits = 0;
-    private int shaderUnits = 0;
+    private int pixelShaderUnits = 0;
+    private int vertexShaderUnits = 0;
+    private int unifiedShaderUnits = 0;
     private int raytracingUnits = 0;
     private int tensorUnits = 0;
 
@@ -69,8 +83,18 @@ public class GpuComputeModel {
       return this;
     }
 
-    public Builder shaderUnits(int shaderUnits) {
-      this.shaderUnits = shaderUnits;
+    public Builder pixelShaderUnits(int pixelShaderUnits) {
+      this.pixelShaderUnits = pixelShaderUnits;
+      return this;
+    }
+
+    public Builder vertexShaderUnits(int vertexShaderUnits) {
+      this.vertexShaderUnits = vertexShaderUnits;
+      return this;
+    }
+
+    public Builder unifiedShaderUnits(int unifiedShaderUnits) {
+      this.unifiedShaderUnits = unifiedShaderUnits;
       return this;
     }
 

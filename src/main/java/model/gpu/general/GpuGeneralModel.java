@@ -4,13 +4,16 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import util.graphics.vendor.GpuVendor;
 
 public class GpuGeneralModel {
 
   private final String productName;
   private final String codeName;
   private final String revision;
-  private final String vendor;
+  private final GpuVendor vendor;
+  private final String subvendor;
+  private final int subvendorId;
   private final String architecture;
   private final String foundry;
   private final String processNode;
@@ -26,6 +29,8 @@ public class GpuGeneralModel {
     this.codeName = builder.codeName;
     this.revision = builder.revision;
     this.vendor = builder.vendor;
+    this.subvendor = builder.subvendor;
+    this.subvendorId = builder.subvendorId;
     this.architecture = builder.architecture;
     this.foundry = builder.foundry;
     this.processNode = builder.processNode;
@@ -49,8 +54,16 @@ public class GpuGeneralModel {
     return revision;
   }
 
-  public String vendor() {
+  public GpuVendor vendor() {
     return vendor;
+  }
+
+  public String subvendor() {
+    return subvendor;
+  }
+
+  public int subvendorId() {
+    return subvendorId;
   }
 
   public String architecture() {
@@ -98,7 +111,9 @@ public class GpuGeneralModel {
     private final String productName;
     private String codeName = "Unknown";
     private String revision = "Unknown";
-    private String vendor = "Unknown";
+    private GpuVendor vendor = GpuVendor.UNKNOWN;
+    private String subvendor = "Unknown";
+    private int subvendorId = -1;
     private String architecture = "Unknown";
     private String foundry = "Unknown";
     private String processNode = "Unknown";
@@ -123,8 +138,18 @@ public class GpuGeneralModel {
       return this;
     }
 
-    public Builder vendor(String vendor) {
+    public Builder vendor(GpuVendor vendor) {
       this.vendor = vendor;
+      return this;
+    }
+
+    public Builder subvendor(String subvendor) {
+      this.subvendor = subvendor;
+      return this;
+    }
+
+    public Builder subvendorId(int subvendorId) {
+      this.subvendorId = subvendorId;
       return this;
     }
 

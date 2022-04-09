@@ -34,7 +34,7 @@ fun GpuView(model: GpuModel) { // TODO: Should be a selectable list of GPUs in y
                 ) {
                     TextCard(Modifier.weight(1.0f, true), "GPU", model.general.codeName())
                     TextCard(Modifier.weight(1.0f, true), "Revision", model.general.revision())
-                    TextCard(Modifier.weight(1.0f, true), "Vendor", model.general.vendor())
+                    TextCard(Modifier.weight(1.0f, true), "Vendor", model.general.vendor().vendorName())
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(
@@ -77,7 +77,7 @@ fun GpuView(model: GpuModel) { // TODO: Should be a selectable list of GPUs in y
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    TextCard(Modifier.weight(1.0f, true), "CUs", model.compute.computeUnits().toString())
+                    TextCard(Modifier.weight(1.0f, true), model.general.vendor().terms().computeUnitTerm().shortPlural, model.compute.computeUnits().toString())
                     TextCard(Modifier.weight(1.0f, true), "ROPs", model.compute.rasterOperationUnits().toString())
                     TextCard(Modifier.weight(1.0f, true), "TMUs", model.compute.textureMappingUnits().toString())
                 }
@@ -92,9 +92,9 @@ fun GpuView(model: GpuModel) { // TODO: Should be a selectable list of GPUs in y
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    TextCard(Modifier.weight(1.0f, true), "Shader Units", model.compute.shaderUnits().toString())
-                    TextCard(Modifier.weight(1.0f, true), "RT Units", model.compute.raytracingUnits().toString())
-                    TextCard(Modifier.weight(1.0f, true), "Tensor Units", model.compute.tensorUnits().toString())
+                    TextCard(Modifier.weight(1.0f, true), model.general.vendor().terms().shaderUnitTerm().shortPlural, model.compute.unifiedShaderUnits().toString())
+                    TextCard(Modifier.weight(1.0f, true), model.general.vendor().terms().raytracingUnitTerm().shortPlural, model.compute.raytracingUnits().toString())
+                    TextCard(Modifier.weight(1.0f, true), model.general.vendor().terms().tensorUnitTerm().shortPlural, model.compute.tensorUnits().toString())
                 }
 
                 Divider(modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 8.dp, bottom = 4.dp), color = Color(230, 230, 230))
