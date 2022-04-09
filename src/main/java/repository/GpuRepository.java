@@ -77,7 +77,7 @@ public class GpuRepository {
     return result.get();
   }
 
-  private GpuComputeModel generateComputeModel() {
+  private GpuComputeModel generateComputeModel() { // Only works for Nvidia currently
     var builder = new GpuComputeModel.Builder();
 
     new CUDAInstance().run(() -> {
@@ -105,6 +105,8 @@ public class GpuRepository {
         builder.unifiedShaderUnits(shaderUnitCount);
         builder.tensorUnits(tensorUnitCount);
         builder.raytracingUnits(raytracingUnitCount);
+        builder.rasterOperationUnits(-1); // Don't know how to get these yet
+        builder.textureMappingUnits(-1); // Don't know how to get these yet
 
       }
     });
