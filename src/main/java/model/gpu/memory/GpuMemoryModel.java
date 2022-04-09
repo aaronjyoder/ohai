@@ -2,7 +2,7 @@ package model.gpu.memory;
 
 public class GpuMemoryModel {
 
-  private final int size; // bytes
+  private final long size; // bytes
   private final String type;
   private final String vendor;
   private final int busWidth; // -bit
@@ -14,7 +14,7 @@ public class GpuMemoryModel {
     this.busWidth = builder.busWidth;
   }
 
-  public int size() {
+  public long size() {
     return size;
   }
 
@@ -32,12 +32,12 @@ public class GpuMemoryModel {
 
   public static class Builder {
 
-    private final int size;
+    private final long size;
     private String type = "Unknown";
     private String vendor = "Unknown";
     private int busWidth = 0;
 
-    public Builder(int size) {
+    public Builder(long size) {
       this.size = size;
     }
 
