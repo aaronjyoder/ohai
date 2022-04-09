@@ -33,7 +33,7 @@ public class GpuRepository {
 
       var general = new GpuGeneralModel.Builder(gpu.getName()).deviceId(gpu.getDeviceId())
           .vendor(vendor)
-          .architecture(getArchitecture())
+          .architecture(getArchitecture(vendor))
           .build();
       var compute = generateComputeModel(vendor);
       var memory = new GpuMemoryModel.Builder(0).build();
@@ -55,25 +55,40 @@ public class GpuRepository {
     return GpuVendor.UNKNOWN;
   }
 
-  private String getArchitecture() {
+  private String getArchitecture(GpuVendor vendor) {
     AtomicReference<String> result = new AtomicReference<>("Unknown");
-    new CUDAInstance().run(() -> {
-      try (MemoryStack stack = stackPush()) {
-        var pi = stack.mallocInt(1);
-        cuInit(0);
-        cuDeviceGetCount(pi);
-        cuDeviceGet(pi, 0);
-        var device = pi.get(0);
 
-        var pt = stack.mallocInt(1);
-        cuDeviceComputeCapability(pi, pt, device);
-
-        var major = pi.get(0);
-        var minor = pt.get(0);
-
-        result.set(NvidiaUtil.getArchitecture(major, minor));
+    switch (vendor) {
+      case AMD -> {
+        // TODO: Use AMD-specific APIs where possible
       }
-    });
+      case INTEL -> {
+        // TODO: Use Intel-specific APIs where possible
+      }
+      case NVIDIA -> {
+        new CUDAInstance().run(() -> {
+          try (MemoryStack stack = stackPush()) {
+            var pi = stack.mallocInt(1);
+            cuInit(0);
+            cuDeviceGetCount(pi);
+            cuDeviceGet(pi, 0);
+            var device = pi.get(0);
+
+            var pt = stack.mallocInt(1);
+            cuDeviceComputeCapability(pi, pt, device);
+
+            var major = pi.get(0);
+            var minor = pt.get(0);
+
+            result.set(NvidiaUtil.getArchitecture(major, minor));
+          }
+        });
+      }
+      case UNKNOWN -> {
+        // TODO: Do not use any vendor-specific APIs
+      }
+    }
+
     return result.get();
   }
 
