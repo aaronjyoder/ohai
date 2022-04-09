@@ -1,4 +1,4 @@
-package util.graphics.vendor;
+package model.gpu.vendor;
 
 public record MarketingTerms(Term computeUnitTerm, Term shaderUnitTerm, Term tensorUnitTerm, Term raytracingUnitTerm) {
 

@@ -21,7 +21,7 @@ import model.gpu.memory.GpuMemoryModel;
 import org.lwjgl.system.MemoryStack;
 import oshi.SystemInfo;
 import util.graphics.NvidiaUtil;
-import util.graphics.vendor.GpuVendor;
+import model.gpu.vendor.GpuVendor;
 
 public class GpuRepository {
 

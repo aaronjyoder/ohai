@@ -1,4 +1,4 @@
-package util.graphics.vendor;
+package model.gpu.vendor;
 
 public enum GpuVendor { // Vendor IDs: https://pcisig.com/membership/member-companies
 

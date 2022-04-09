@@ -14,7 +14,7 @@ import model.gpu.compute.GpuComputeModel
 import model.gpu.driver.GpuDriverModel
 import model.gpu.general.GpuGeneralModel
 import model.gpu.memory.GpuMemoryModel
-import util.graphics.vendor.MarketingTerms
+import model.gpu.vendor.MarketingTerms
 
 @Composable
 fun GpuView(model: GpuModel) { // TODO: Should be a selectable list of GPUs in your system eventually

@@ -1,4 +1,4 @@
-package util.graphics.vendor;
+package model.gpu.vendor;
 
 public record Term(String singular, String plural, String shortSingular, String shortPlural) {
 
