@@ -158,8 +158,8 @@ fun MemorySection(model: GpuMemoryModel) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) { // TODO: Make memory unit whatever makes the most sense for the value given
-            val size = MemoryUnit.GIBIBYTES.convert(model.bytes(), MemoryUnit.BYTES)
-            TextCard(Modifier.weight(1.0f, true), "Size", if (model.bytes() < 0) "Unknown" else "$size GiB")
+//            val size = MemoryUnit.GIBIBYTES.convert(model.bytes(), MemoryUnit.BYTES)
+            TextCard(Modifier.weight(1.0f, true), "Size", if (model.bytes() < 0) "Unknown" else MemoryUnit.convertReadable(model.bytes()))
             TextCard(Modifier.weight(1.0f, true), "Type", model.type())
             TextCard(Modifier.weight(1.0f, true), "Vendor", model.vendor())
         }

@@ -36,6 +36,43 @@ public enum MemoryUnit {
     this.scale = s;
   }
 
+  public static String convertReadable(long srcBytes) {
+    return convertReadable(srcBytes, false);
+  }
+
+  public static String convertReadable(long srcBytes, boolean siUnits) {
+    long absBytes = Math.abs(srcBytes);
+    if (siUnits) {
+      if (absBytes >= PETA_SCALE) {
+        return (long) (srcBytes / (double) PETA_SCALE) + " PB";
+      } else if (absBytes >= TERA_SCALE) {
+        return (long) (srcBytes / (double) TERA_SCALE) + " TB";
+      } else if (absBytes >= GIGA_SCALE) {
+        return (long) (srcBytes / (double) GIGA_SCALE) + " GB";
+      } else if (absBytes >= MEGA_SCALE) {
+        return (long) (srcBytes / (double) MEGA_SCALE) + " MB";
+      } else if (absBytes >= KILO_SCALE) {
+        return (long) (srcBytes / (double) KILO_SCALE) + " kB";
+      } else {
+        return srcBytes + " bytes";
+      }
+    } else {
+      if (absBytes >= PEBI_SCALE) {
+        return (long) (srcBytes / (double) PEBI_SCALE) + " PiB";
+      } else if (absBytes >= TEBI_SCALE) {
+        return (long) (srcBytes / (double) TEBI_SCALE) + " TiB";
+      } else if (absBytes >= GIBI_SCALE) {
+        return (long) (srcBytes / (double) GIBI_SCALE) + " GiB";
+      } else if (absBytes >= MEBI_SCALE) {
+        return (long) (srcBytes / (double) MEBI_SCALE) + " MiB";
+      } else if (absBytes >= KIBI_SCALE) {
+        return (long) (srcBytes / (double) KIBI_SCALE) + " KiB";
+      } else {
+        return srcBytes + " bytes";
+      }
+    }
+  }
+
   public long convert(long sourceBytes, MemoryUnit sourceUnit) {
     return icvt(sourceBytes, scale, sourceUnit.scale);
   }
