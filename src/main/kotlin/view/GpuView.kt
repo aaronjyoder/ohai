@@ -15,7 +15,7 @@ import model.gpu.driver.GpuDriverModel
 import model.gpu.general.GpuGeneralModel
 import model.gpu.memory.GpuMemoryModel
 import model.gpu.vendor.MarketingTerms
-import util.graphics.MemoryUtil
+import util.graphics.MemoryUnit
 
 @Composable
 fun GpuView(model: GpuModel) { // TODO: Should be a selectable list of GPUs in your system eventually
@@ -158,7 +158,8 @@ fun MemorySection(model: GpuMemoryModel) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) { // TODO: Make memory unit whatever makes the most sense for the value given
-            TextCard(Modifier.weight(1.0f, true), "Size", if (model.size() < 0) "Unknown" else "${MemoryUtil.convertToGigabytes(model.size())} GB")
+            val size = MemoryUnit.GIBIBYTES.convert(model.bytes(), MemoryUnit.BYTES)
+            TextCard(Modifier.weight(1.0f, true), "Size", if (model.bytes() < 0) "Unknown" else "$size GiB")
             TextCard(Modifier.weight(1.0f, true), "Type", model.type())
             TextCard(Modifier.weight(1.0f, true), "Vendor", model.vendor())
         }

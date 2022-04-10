@@ -7,15 +7,15 @@ public enum GpuVendor { // Vendor IDs: https://pcisig.com/membership/member-comp
       new MarketingTerms(
           new Term("Compute Unit", "Compute Units", "CU", "CUs"),
           new Term("Stream Processor", "Stream Processors", "SP", "SPs"),
-          new Term("Tensor Unit", "Tensor Units", "TU", "TUs"), // AMD doesn't have these yet, so just using the neutral term.
-          new Term("Ray Accelerator", "Ray Accelerators", "RA", "RAs")
+          new Term("Tensor Unit", "Tensor Units"), // AMD doesn't have these yet, so just using the neutral term.
+          new Term("Ray Accelerator", "Ray Accelerators")
       )
   ),
   INTEL("Intel", 8086,
       new MarketingTerms(
           new Term("Xe Core"),
-          new Term("Vector Engine", "Vector Engines", "VE", "VEs"), // Not sure if this is an accurate analogue
-          new Term("Matrix Engine", "Matrix Engines", "ME", "MEs"), // Not sure if Matrix Engines are the same as XMX Cores
+          new Term("Vector Engine", "Vector Engines"), // Not sure if this is an accurate analogue
+          new Term("Matrix Engine", "Matrix Engines"), // Not sure if Matrix Engines are the same as XMX Cores
           new Term("Ray Tracing Unit", "Ray Tracing Units", "RT Unit", "RT Units")
       )
   ),

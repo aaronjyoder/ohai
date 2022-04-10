@@ -30,7 +30,7 @@ public class NvidiaUtil { // Check this for updates: https://github.com/NVIDIA/c
       Map.entry(0x80, new GpuRecord("Ampere", 64, 4, 0)), // Ampere, specifically GA100, so no RT cores
       Map.entry(0x86, new GpuRecord("Ampere", 128, 4, 1)), // Ampere
       Map.entry(0x87, new GpuRecord("Orin", 128, 4, 1)), // Ampere? Seems to refer to an Orin SoC which has Ampere architecture GPU
-      Map.entry(0x90, new GpuRecord("Hopper", -1, 4, 0)) // Hopper, 128? 256?, specifically Gh100, so no RT cores
+      Map.entry(0x90, new GpuRecord("Hopper", -1, 4, 0)) // Hopper, 128? 256?, specifically GH100, so no RT cores
   );
 
   public static int getShaderUnitsPerSM(int major, int minor) {

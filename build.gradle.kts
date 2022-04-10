@@ -1,6 +1,7 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URI
 
 // LWJGL
 val lwjglVersion = "3.3.1"
@@ -34,6 +35,9 @@ repositories {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven {
+        url = URI("https://maven.maxhenkel.de/repository/public")
+    }
 }
 
 dependencies {
@@ -41,6 +45,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
 
     implementation("com.github.oshi:oshi-core:6.1.5")
+    implementation("de.bommel24.nvmlj:nvmlj:1.0.2")
 
     // LWJGL
     implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))

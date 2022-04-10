@@ -10,6 +10,8 @@ import static org.lwjgl.cuda.CU.cuInit;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 import compute.CUDAInstance;
+import de.bommel24.nvmlj.NVMLJ;
+import de.bommel24.nvmlj.NVMLJException;
 import graphics.OpenGLInstance;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +40,24 @@ public class GpuRepository {
 
       var general = new GpuGeneralModel.Builder(gpu.getName()).deviceId(gpu.getDeviceId())
           .vendor(vendor)
-          .architecture(getArchitecture(vendor))
-          .build();
+          .architecture(getArchitecture(vendor));
+
       var compute = generateComputeModel(vendor);
-      var memory = new GpuMemoryModel.Builder(getFrameBufferSize(vendor)).busWidth(getMemoryBusWidth(vendor)).build();
-      var driver = new GpuDriverModel.Builder().build();
-      result.add(new GpuModel(general, compute, memory, driver));
+      var memory = new GpuMemoryModel.Builder(getFrameBufferSize(vendor)).busWidth(getMemoryBusWidth(vendor));
+      var driver = new GpuDriverModel.Builder();
+
+      try { // TODO: Put this in Nvidia-specific area
+        System.setProperty("nvml.path", "C:/Windows/System32/nvml.dll");
+        NVMLJ.nvmlInit();
+        var deviceHandle = NVMLJ.nvmlDeviceGetHandleByIndex(0);
+        general.biosVersion(deviceHandle.nvmlDeviceGetVbiosVersion());
+        driver.version(NVMLJ.nvmlSystemGetDriverVersion());
+        NVMLJ.nvmlShutdown();
+      } catch (NVMLJException e) {
+        e.printStackTrace();
+      }
+
+      result.add(new GpuModel(general.build(), compute, memory.build(), driver.build()));
     }
     return result;
   }
@@ -155,18 +169,25 @@ public class GpuRepository {
         // TODO: Use AMD-specific APIs where possible
         new OpenGLInstance().run(() -> {
           long dedicatedMem = GL11.glGetInteger(ATIMeminfo.GL_VBO_FREE_MEMORY_ATI); // This is in kilobytes
-          result.set(dedicatedMem * 1000);
+          result.set(dedicatedMem * 1024);
         });
       }
       case INTEL -> {
         // TODO: Use Intel-specific APIs where possible
       }
       case NVIDIA -> {
-        // TODO: Use Nvidia-specific APIs where possible
-        new OpenGLInstance().run(() -> {
-          long dedicatedMem = GL11.glGetInteger(NVXGPUMemoryInfo.GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX); // This is in kilobytes
-          result.set(dedicatedMem * 1000);
-        });
+        try {
+          System.setProperty("nvml.path", "C:/Windows/System32/nvml.dll");
+          NVMLJ.nvmlInit();
+          var deviceHandle = NVMLJ.nvmlDeviceGetHandleByIndex(0);
+          result.set(deviceHandle.nvmlDeviceGetMemoryInfo().total);
+          NVMLJ.nvmlShutdown();
+        } catch (NVMLJException e) {
+          new OpenGLInstance().run(() -> {
+            long dedicatedMem = GL11.glGetInteger(NVXGPUMemoryInfo.GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX); // This is in kilobytes
+            result.set(dedicatedMem * 1024);
+          });
+        }
       }
       case UNKNOWN -> {
         // TODO: Do not use any vendor-specific APIs
