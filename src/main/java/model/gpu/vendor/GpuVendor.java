@@ -7,7 +7,7 @@ public enum GpuVendor { // Vendor IDs: https://pcisig.com/membership/member-comp
       new MarketingTerms(
           new Term("Compute Unit", "Compute Units", "CU", "CUs"),
           new Term("Stream Processor", "Stream Processors", "SP", "SPs"),
-          new Term("Tensor Unit", "Tensor Units", "TU", "TUs"), // AMD doesn't have these yet, so just using the neutral singular.
+          new Term("Tensor Unit", "Tensor Units", "TU", "TUs"), // AMD doesn't have these yet, so just using the neutral term.
           new Term("Ray Accelerator", "Ray Accelerators", "RA", "RAs")
       )
   ),
