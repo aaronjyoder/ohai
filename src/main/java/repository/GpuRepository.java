@@ -10,9 +10,11 @@ import static org.lwjgl.cuda.CU.cuInit;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 import compute.CUDAInstance;
+import compute.OpenCLInstance;
 import de.bommel24.nvmlj.NVMLJ;
 import de.bommel24.nvmlj.NVMLJException;
 import graphics.OpenGLInstance;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +25,9 @@ import model.gpu.driver.GpuDriverModel;
 import model.gpu.general.GpuGeneralModel;
 import model.gpu.memory.GpuMemoryModel;
 import model.gpu.vendor.GpuVendor;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.opencl.CL10;
+import org.lwjgl.opencl.CL11;
 import org.lwjgl.opengl.ATIMeminfo;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.NVXGPUMemoryInfo;
@@ -46,15 +51,17 @@ public class GpuRepository {
       var memory = new GpuMemoryModel.Builder(getFrameBufferSize(vendor)).busWidth(getMemoryBusWidth(vendor));
       var driver = new GpuDriverModel.Builder();
 
-      try { // TODO: Put this in Nvidia-specific area
-        System.setProperty("nvml.path", "C:/Windows/System32/nvml.dll");
-        NVMLJ.nvmlInit();
-        var deviceHandle = NVMLJ.nvmlDeviceGetHandleByIndex(0);
-        general.vbiosVersion(deviceHandle.nvmlDeviceGetVbiosVersion());
-        driver.version(NVMLJ.nvmlSystemGetDriverVersion());
-        NVMLJ.nvmlShutdown();
-      } catch (NVMLJException e) {
-        e.printStackTrace();
+      if (vendor.equals(GpuVendor.NVIDIA)) {
+        try { // TODO: Put this in Nvidia-specific area
+          System.setProperty("nvml.path", "C:/Windows/System32/nvml.dll");
+          NVMLJ.nvmlInit();
+          var deviceHandle = NVMLJ.nvmlDeviceGetHandleByIndex(0);
+          general.vbiosVersion(deviceHandle.nvmlDeviceGetVbiosVersion());
+          driver.version(NVMLJ.nvmlSystemGetDriverVersion());
+          NVMLJ.nvmlShutdown();
+        } catch (NVMLJException e) {
+          e.printStackTrace();
+        }
       }
 
       result.add(new GpuModel(general.build(), compute, memory.build(), driver.build()));
@@ -111,12 +118,42 @@ public class GpuRepository {
     return result.get();
   }
 
-  private GpuComputeModel generateComputeModel(GpuVendor vendor) { // Only works for Nvidia currently
+  private GpuComputeModel generateComputeModel(GpuVendor vendor) {
     var builder = new GpuComputeModel.Builder();
 
     switch (vendor) {
       case AMD -> {
         // TODO: Use AMD-specific APIs where possible
+        new OpenCLInstance().run(() -> {
+          try (MemoryStack stack = stackPush()) {
+            IntBuffer pi = stack.mallocInt(1);
+            CL11.clGetPlatformIDs(null, pi);
+
+            PointerBuffer platforms = stack.mallocPointer(pi.get(0));
+            CL11.clGetPlatformIDs(platforms, (IntBuffer) null);
+
+            for (int p = 0; p < platforms.capacity(); p++) {
+              long platform = platforms.get(p);
+
+              CL11.clGetDeviceIDs(platform, CL10.CL_DEVICE_TYPE_GPU, null, pi);
+
+              PointerBuffer devices = stack.mallocPointer(pi.get(0));
+              CL11.clGetDeviceIDs(platform, CL10.CL_DEVICE_TYPE_GPU, devices, (IntBuffer) null);
+
+              for (int d = 0; d < devices.capacity(); d++) {
+                long device = devices.get(d);
+
+                // TODO: Check device info before doing this so that multi-gpu setups can be supported
+
+                CL11.clGetDeviceInfo(device, CL11.CL_DEVICE_MAX_COMPUTE_UNITS, pi, null);
+                var computeUnits = pi.get(0);
+                builder.computeUnits(computeUnits);
+                builder.raytracingUnits(-1);
+                builder.tensorUnits(0);
+              }
+            }
+          }
+        });
       }
       case INTEL -> {
         // TODO: Use Intel-specific APIs where possible
