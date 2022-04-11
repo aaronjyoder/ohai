@@ -20,7 +20,7 @@ public class GpuGeneralModel {
   private final long transistors;
   private final int dieSizeSquare; // millimeters
   private final Instant releaseDate;
-  private final String biosVersion;
+  private final String vbiosVersion;
   private final String deviceId;
   private final String busInterface;
 
@@ -37,7 +37,7 @@ public class GpuGeneralModel {
     this.transistors = builder.transistors;
     this.dieSizeSquare = builder.dieSizeSquare;
     this.releaseDate = builder.releaseDate;
-    this.biosVersion = builder.biosVersion;
+    this.vbiosVersion = builder.vbiosVersion;
     this.deviceId = builder.deviceId;
     this.busInterface = builder.busInterface;
   }
@@ -94,8 +94,8 @@ public class GpuGeneralModel {
     return DateTimeFormatter.ofPattern("MMM d, yyyy").format(LocalDateTime.ofInstant(releaseDate, ZoneOffset.UTC));
   }
 
-  public String biosVersion() {
-    return biosVersion;
+  public String vbiosVersion() {
+    return vbiosVersion;
   }
 
   public String deviceId() {
@@ -120,7 +120,7 @@ public class GpuGeneralModel {
     private long transistors = 0;
     private int dieSizeSquare = 0;
     private Instant releaseDate = Instant.EPOCH;
-    private String biosVersion = "Unknown";
+    private String vbiosVersion = "Unknown";
     private String deviceId = "Unknown";
     private String busInterface = "Unknown";
 
@@ -183,8 +183,8 @@ public class GpuGeneralModel {
       return this;
     }
 
-    public Builder biosVersion(String biosVersion) {
-      this.biosVersion = biosVersion;
+    public Builder vbiosVersion(String vbiosVersion) {
+      this.vbiosVersion = vbiosVersion;
       return this;
     }
 

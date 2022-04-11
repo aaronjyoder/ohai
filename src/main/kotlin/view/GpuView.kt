@@ -42,7 +42,7 @@ fun GpuView(model: GpuModel) { // TODO: Should be a selectable list of GPUs in y
 
                 Divider(modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 8.dp, bottom = 4.dp), color = Color(230, 230, 230))
 
-                ClocksSection() // TODO: Make model for clocks
+//                ClocksSection() // TODO: Make model for clocks
 
                 Divider(modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 8.dp, bottom = 4.dp), color = Color(230, 230, 230))
 
@@ -72,8 +72,8 @@ fun GeneralSection(model: GpuGeneralModel) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TextCard(Modifier.weight(1.0f, true), "GPU", model.codeName())
-            TextCard(Modifier.weight(1.0f, true), "Revision", model.revision())
+//            TextCard(Modifier.weight(1.0f, true), "GPU", model.codeName())
+//            TextCard(Modifier.weight(1.0f, true), "Revision", model.revision())
             TextCard(Modifier.weight(1.0f, true), "Vendor", model.vendor().vendorName())
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -82,32 +82,32 @@ fun GeneralSection(model: GpuGeneralModel) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             TextCard(Modifier.weight(2.0f, true), "Architecture", model.architecture())
-            TextCard(Modifier.weight(1.0f, true), "Foundry", model.foundry())
+//            TextCard(Modifier.weight(1.0f, true), "Foundry", model.foundry())
         }
         Spacer(modifier = Modifier.height(4.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TextCard(Modifier.weight(1.0f, true), "Process Node", model.processNode())
-            TextCard(Modifier.weight(1.0f, true), "Transistors", model.transistors().toString())
-            TextCard(Modifier.weight(1.0f, true), "Die Size", "${model.dieSizeSquare()} mm²")
+//            TextCard(Modifier.weight(1.0f, true), "Process Node", model.processNode())
+//            TextCard(Modifier.weight(1.0f, true), "Transistors", model.transistors().toString())
+//            TextCard(Modifier.weight(1.0f, true), "Die Size", "${model.dieSizeSquare()} mm²")
         }
         Spacer(modifier = Modifier.height(4.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TextCard(Modifier.weight(1.0f, true), "Release Date", model.releaseDateString())
-            TextCard(Modifier.weight(2.0f, true), "BIOS Version", model.biosVersion())
+//            TextCard(Modifier.weight(1.0f, true), "Release Date", model.releaseDateString())
+            TextCard(Modifier.weight(2.0f, true), "VBIOS Version", model.vbiosVersion())
         }
         Spacer(modifier = Modifier.height(4.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TextCard(Modifier.weight(1.0f, true), "Device ID", model.deviceId())
-            TextCard(Modifier.weight(1.0f, true), "Bus Interface", model.busInterface())
+//            TextCard(Modifier.weight(1.0f, true), "Device ID", model.deviceId())
+//            TextCard(Modifier.weight(1.0f, true), "Bus Interface", model.busInterface())
         }
     }
 }
@@ -125,15 +125,15 @@ fun ComputeSection(model: GpuComputeModel, terms: MarketingTerms) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             TextCard(Modifier.weight(1.0f, true), terms.computeUnitTerm().shortPlural, if (model.computeUnits() < 0) "Unknown" else model.computeUnits().toString())
-            TextCard(Modifier.weight(1.0f, true), "ROPs", if (model.rasterOperationUnits() < 0) "Unknown" else model.rasterOperationUnits().toString())
-            TextCard(Modifier.weight(1.0f, true), "TMUs", if (model.textureMappingUnits() < 0) "Unknown" else model.textureMappingUnits().toString())
+//            TextCard(Modifier.weight(1.0f, true), "ROPs", if (model.rasterOperationUnits() < 0) "Unknown" else model.rasterOperationUnits().toString())
+//            TextCard(Modifier.weight(1.0f, true), "TMUs", if (model.textureMappingUnits() < 0) "Unknown" else model.textureMappingUnits().toString())
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TextCard(Modifier.weight(1.0f, true), "Pixel Fillrate", "Unknown")
-            TextCard(Modifier.weight(1.0f, true), "Texture Fillrate", "Unknown")
+//            TextCard(Modifier.weight(1.0f, true), "Pixel Fillrate", "Unknown")
+//            TextCard(Modifier.weight(1.0f, true), "Texture Fillrate", "Unknown")
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -159,15 +159,15 @@ fun MemorySection(model: GpuMemoryModel) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) { // TODO: Make memory unit whatever makes the most sense for the value given
             TextCard(Modifier.weight(1.0f, true), "Size", if (model.bytes() < 0) "Unknown" else MemoryUnit.convertReadable(model.bytes()))
-            TextCard(Modifier.weight(1.0f, true), "Type", model.type())
-            TextCard(Modifier.weight(1.0f, true), "Vendor", model.vendor())
+//            TextCard(Modifier.weight(1.0f, true), "Type", model.type())
+//            TextCard(Modifier.weight(1.0f, true), "Vendor", model.vendor())
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             TextCard(Modifier.weight(1.0f, true), "Bus Width", if (model.busWidth() < 0) "Unknown" else "${model.busWidth()}-bit")
-            TextCard(Modifier.weight(1.0f, true), "Bandwidth", "0 b/s")
+//            TextCard(Modifier.weight(1.0f, true), "Bandwidth", "0 b/s")
         }
     }
 }
@@ -223,8 +223,8 @@ fun DriverSection(model: GpuDriverModel) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TextCard(Modifier.weight(1.0f, true), "Date", model.dateString())
-            TextCard(Modifier.weight(1.0f, true), "Signature", model.signature())
+//            TextCard(Modifier.weight(1.0f, true), "Date", model.dateString())
+//            TextCard(Modifier.weight(1.0f, true), "Signature", model.signature())
         }
     }
 }

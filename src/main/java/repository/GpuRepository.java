@@ -50,7 +50,7 @@ public class GpuRepository {
         System.setProperty("nvml.path", "C:/Windows/System32/nvml.dll");
         NVMLJ.nvmlInit();
         var deviceHandle = NVMLJ.nvmlDeviceGetHandleByIndex(0);
-        general.biosVersion(deviceHandle.nvmlDeviceGetVbiosVersion());
+        general.vbiosVersion(deviceHandle.nvmlDeviceGetVbiosVersion());
         driver.version(NVMLJ.nvmlSystemGetDriverVersion());
         NVMLJ.nvmlShutdown();
       } catch (NVMLJException e) {
