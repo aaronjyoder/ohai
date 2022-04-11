@@ -4,20 +4,60 @@ public enum MemoryUnit {
 
   BYTES(MemoryUnit.BYTE_SCALE),
 
+  /**
+   * Memory unit representing one thousand bytes.
+   */
   KILOBYTES(MemoryUnit.KILO_SCALE),
+
+  /**
+   * Memory unit representing one million bytes.
+   */
   MEGABYTES(MemoryUnit.MEGA_SCALE),
+
+  /**
+   * Memory unit representing one billion bytes.
+   */
   GIGABYTES(MemoryUnit.GIGA_SCALE),
+
+  /**
+   * Memory unit representing one trillion bytes.
+   */
   TERABYTES(MemoryUnit.TERA_SCALE),
+
+  /**
+   * Memory unit representing one quadrillion bytes.
+   */
   PETABYTES(MemoryUnit.PETA_SCALE),
 
+  /**
+   * Memory unit representing 2^10 bytes.
+   */
   KIBIBYTES(MemoryUnit.KIBI_SCALE),
+
+  /**
+   * Memory unit representing 2^20 bytes.
+   */
   MEBIBYTES(MemoryUnit.MEBI_SCALE),
+
+  /**
+   * Memory unit representing 2^30 bytes.
+   */
   GIBIBYTES(MemoryUnit.GIBI_SCALE),
+
+  /**
+   * Memory unit representing 2^40 bytes.
+   */
   TEBIBYTES(MemoryUnit.TEBI_SCALE),
+
+  /**
+   * Memory unit representing 2^50 bytes.
+   */
   PEBIBYTES(MemoryUnit.PEBI_SCALE);
 
 
+  // Scale units
   private static final long BYTE_SCALE = 1L;
+
   private static final long KILO_SCALE = 1000L;
   private static final long MEGA_SCALE = 1000L * KILO_SCALE;
   private static final long GIGA_SCALE = 1000L * MEGA_SCALE;
