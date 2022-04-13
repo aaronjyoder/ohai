@@ -3,7 +3,7 @@ package model.gpu.vendor;
 public enum GpuVendor { // Vendor IDs: https://pcisig.com/membership/member-companies
 
   UNKNOWN("Unknown", -1, MarketingTerms.UNKNOWN),
-  AMD("AMD", 0x1022,
+  AMD("AMD", 0x1002,
       new MarketingTerms(
           new Term("Compute Unit", "Compute Units", "CU", "CUs"),
           new Term("Stream Processor", "Stream Processors", "SP", "SPs"),
