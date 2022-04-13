@@ -25,7 +25,7 @@ fun OhaiApp() {
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Ohai 0.1.0 (alpha)",
+        title = "Ohai 0.1.0-alpha",
         state = WindowState(width = 400.dp, height = 550.dp),
         resizable = false,
 //        icon = BitmapPainter(useResource("icon/icon.png", ::loadImageBitmap))

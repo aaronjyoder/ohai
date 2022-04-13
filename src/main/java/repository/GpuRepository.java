@@ -33,6 +33,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.NVXGPUMemoryInfo;
 import org.lwjgl.system.MemoryStack;
 import oshi.SystemInfo;
+import util.graphics.AMDUtil;
 import util.graphics.NvidiaUtil;
 
 public class GpuRepository {
@@ -146,10 +147,17 @@ public class GpuRepository {
                 // TODO: Check device info before doing this so that multi-gpu setups can be supported
 
                 CL11.clGetDeviceInfo(device, CL11.CL_DEVICE_MAX_COMPUTE_UNITS, pi, null);
-                var computeUnits = pi.get(0);
-                builder.computeUnits(computeUnits);
-                builder.raytracingUnits(-1);
-                builder.tensorUnits(0);
+                int cuCount = pi.get(0);
+
+                // TODO: Use helper methods for this
+                int shaderUnitCount = -1;
+                int tensorUnitCount = AMDUtil.getTenorsUnitsPerCU();
+                int raytracingUnitCount = -1;
+
+                builder.computeUnits(cuCount);
+                builder.unifiedShaderUnits(shaderUnitCount);
+                builder.tensorUnits(tensorUnitCount);
+                builder.raytracingUnits(raytracingUnitCount);
               }
             }
           }
@@ -174,11 +182,11 @@ public class GpuRepository {
             var minor = pt.get(0);
 
             cuDeviceGetAttribute(pi, CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT, device);
-            var cuCount = pi.get(0);
+            int cuCount = pi.get(0);
 
-            var shaderUnitCount = NvidiaUtil.getShaderUnitsPerSM(major, minor) * cuCount;
-            var tensorUnitCount = NvidiaUtil.getTensorUnitsPerSM(major, minor) * cuCount;
-            var raytracingUnitCount = NvidiaUtil.getRaytracingUnitsPerSM(major, minor) * cuCount;
+            int shaderUnitCount = NvidiaUtil.getShaderUnitsPerSM(major, minor) * cuCount;
+            int tensorUnitCount = NvidiaUtil.getTensorUnitsPerSM(major, minor) * cuCount;
+            int raytracingUnitCount = NvidiaUtil.getRaytracingUnitsPerSM(major, minor) * cuCount;
 
             builder.computeUnits(cuCount);
             builder.unifiedShaderUnits(shaderUnitCount);

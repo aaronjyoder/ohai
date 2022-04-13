@@ -90,9 +90,23 @@ compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "ohai"
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
+            includeAllModules = true
+            packageName = "Ohai"
             packageVersion = "1.0.0"
+            description = "Ohai"
+            vendor = "Aaron J Yoder"
+
+            linux {
+                menuGroup = "Ohai"
+            }
+
+            windows {
+                menuGroup = "Ohai"
+                dirChooser = true
+                perUserInstall = true
+            }
+
         }
     }
 }
