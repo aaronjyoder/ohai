@@ -29,7 +29,7 @@ plugins {
 }
 
 group = "com.aaronjyoder"
-version = "0.1.0"
+version = "0.1.1"
 
 repositories {
     google()
@@ -97,11 +97,14 @@ compose.desktop {
             description = "Ohai"
             vendor = "Aaron J Yoder"
 
+            val iconsRoot = project.file("src/main/resources")
             linux {
+                iconFile.set(iconsRoot.resolve("icon/ohai_icon_linux.png"))
                 menuGroup = "Ohai"
             }
 
             windows {
+                iconFile.set(iconsRoot.resolve("icon/ohai_icon_windows.ico"))
                 menuGroup = "Ohai"
                 dirChooser = true
                 perUserInstall = true
