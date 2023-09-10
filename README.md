@@ -1,7 +1,7 @@
 # Ohai
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Donate](https://img.shields.io/badge/donate-PayPal-brightgreen.svg)](https://paypal.me/aaronjyoder)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-white.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-lightgreen.svg)](https://paypal.me/aaronjyoder)
 
 Ohai is an open-source program that allows you to see all kinds of information about your hardware configuration.
 
